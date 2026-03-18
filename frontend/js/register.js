@@ -2,7 +2,8 @@
 
 let createAccountButton = document.getElementById("create-account-btn");
 
-createAccountButton.addEventListener("click", async () => {
+createAccountButton.addEventListener("click", async (e) => {
+    e.preventDefault();
     let username = document.getElementById("username").value;
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
@@ -20,7 +21,7 @@ createAccountButton.addEventListener("click", async () => {
     });
     const data = await response.json();
     if(response.ok){
-        window.location.href = '/login.html';
+        window.location.href = '../pages/login.html';
     }
     else{
         alert(data.message);
