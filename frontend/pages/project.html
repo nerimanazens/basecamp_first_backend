@@ -4,8 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/project.css">
 </head>
-<body>
-    <h1>salam</h1>
+<body style="display: none;">
+    <nav class="flex justify-between items-center p-4 bg-gray-800 text-white w-[1200px] mx-auto rounded my-1">
+        <h1 class="text-[20px] font-bold">MyBaseCamp</h1>
+        <button id="logout" class="bg-red-500 text-white px-4 py-2 rounded">LogOut</button>
+    </nav>
+    <form class="w-[1200px] mx-auto p-4 my-8 bg-white rounded shadow-lg">
+        <label for="project-name" class="font-bold text-[26px]">Create Project</label>
+        <input type="text" class="border p-2 rounded w-full my-2" placeholder="Project Name" id="project-name">
+        <textarea name="description" id="project-description" class="border p-2 rounded w-full my-2" placeholder="Project Description"></textarea>
+        <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" id="create-button">Create</button>
+    </form>
+
+    <div class="project-list">
+        
+    </div>
+
+
+
+
+    <script src="../js/project.js"></script>
 </body>
 </html>

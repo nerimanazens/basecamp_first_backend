@@ -1,0 +1,24 @@
+
+
+
+
+.project-list {
+    width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+.project-item {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    width: full-width;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.project-item h2 {
+    font-weight: bold;
+    font-size: 18px;
+}

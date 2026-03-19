@@ -11,9 +11,11 @@ loginButton.addEventListener("click", async (e) => {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ email, password }),
         });
         if (response.ok) {
+            alert("Login successful!");
             const data = await response.json();
             window.location.href = "../pages/project.html";
         }

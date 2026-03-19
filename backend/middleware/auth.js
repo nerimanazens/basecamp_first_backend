@@ -1,4 +1,4 @@
-
+const db = require('../database/init.js');
 
 function isLoggedIn(req, res, next) {
     if(req.session.user_id){
