@@ -14,10 +14,14 @@ loginButton.addEventListener("click", async (e) => {
             credentials: "include",
             body: JSON.stringify({ email, password }),
         });
+        const data = await response.json();
         if (response.ok) {
             alert("Login successful!");
-            const data = await response.json();
             window.location.href = "../pages/project.html";
+        }
+        
+        else if (data.message == 'Invalid password!') {
+            alert("Invalid password!");
         }
     } catch (error) {
         console.error("Error during login:", error);
