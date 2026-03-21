@@ -17,6 +17,7 @@ async function checkAuth() {
 checkAuth();
 
 async function loadProjects() {
+    project_list.innerHTML = '';
     try {
         const response = await fetch('http://localhost:3000/my-projects', {
             credentials: 'include'
@@ -36,13 +37,14 @@ async function loadProjects() {
                             <button class="edit-btn">Edit</button>
                             <button class="delete-btn" data-id="${project.id}">Delete</button>
                         </div>
-                    </div>
-                    <div class="edit-mode" style="display:none">
+                        <div class="edit-mode" style="display:none">
                         <input class="edit-name" value="${project.name}">
                         <input class="edit-desc" value="${project.description}">
-                        <button class="save-btn">Save</button>
+                        <button class="save-btn" data-id="${project.id}">Save</button>
                         <button class="cancel-btn">Cancel</button>
+                    </div>
                     </div>`;
+
             });
         }
     } catch (error) {
@@ -100,9 +102,34 @@ project_list.addEventListener('click', async (e) => {
     }
     else if (e.target.classList.contains('edit-btn')) {
         const projectItem = e.target.closest('.project-item');
-        const editMode = projectItem.nextElementSibling;
-        editMode.style.display = 'block';
+        projectItem.querySelector('.edit-mode').style.display = 'block';
+        projectItem.querySelector('.edit-delete').style.display = 'none';
+    }
+    else if (e.target.classList.contains('cancel-btn')) {
+        const projectItem = e.target.closest('.project-item');
+        projectItem.querySelector('.edit-mode').style.display = 'none';
+        projectItem.querySelector('.edit-delete').style.display = 'block';
+    }
+    else if (e.target.classList.contains('save-btn')) {
+        const projectItem = e.target.closest('.project-item');
+        const newName = projectItem.querySelector('.edit-name').value;
+        const newDescription = projectItem.querySelector('.edit-desc').value;
+        const id = e.target.dataset.id;
+
+        
+
+        await fetch(`http://localhost:3000/update-project/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ name: newName, description: newDescription })
+        });
+
+        projectItem.querySelector('.edit-mode').style.display = 'none';
+        projectItem.querySelector('.edit-delete').style.display = 'block';
+        await loadProjects();
     }
 });
-
 

@@ -28,11 +28,11 @@ router.get('/my-projects', isLoggedIn, (req, res) => {
 
 });
 
-router.put('/update-project', isLoggedIn, (req, res) => {
+router.put('/update-project/:id', isLoggedIn, (req, res) => {
     const data_from_user = req.body;
     const update_project = db.prepare('UPDATE projects SET name = ?, description = ? WHERE id = ? AND user_id = ?');
     try {
-        update_project.run(data_from_user.name, data_from_user.description, data_from_user.id, req.session.user_id);
+        update_project.run(data_from_user.name, data_from_user.description, req.params.id, req.session.user_id);
     }
     catch (error) {
         return res.status(500).json({ message: 'Something went wrong!' });
