@@ -4,7 +4,7 @@ const db = require('../database/init.js');
 const express = require('express');
 const router = express.Router();
 
-const { isLoggedIn } = require('../middleware/auth.js');
+const { isLoggedIn, isAdmin } = require('../middleware/auth.js');
 
 router.post('/register', async (req, res) => {
     const data_from_user = req.body;
@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Invalid password!' });
     }
     req.session.user_id = user.id;
-    res.json({ message: 'Login successful!' });
+    res.json({ is_admin: user.is_admin, message: 'Login successful!'});
 });
 
 router.delete('/delete-account', isLoggedIn, (req, res) => {
@@ -39,13 +39,30 @@ router.post('/logout', (req, res) => {
     res.json({ message: 'Logout successful!' });
 });
 
-router.get('/all-users', (req, res) => {
-    const users = db.prepare('SELECT id, username, email FROM users').all();
+router.get('/all-users', isAdmin, (req, res) => {
+    const users = db.prepare('SELECT id, username, email, is_admin FROM users').all();
     res.json({ users });
+});
+
+router.get('/user-info', isLoggedIn, (req, res) => {
+    const user = db.prepare('SELECT id, username, email, is_admin FROM users WHERE id = ?').get(req.session.user_id);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found!' });
+    }   
+    res.json({ user });
 });
 
 router.get('/check-session', isLoggedIn, (req, res) => {
     res.json({ message: 'ok' });
 });
+
+
+
+
+
+
+
+
+
 
 module.exports = router;

@@ -3,7 +3,7 @@
 
 
 .project-list {
-    width: 1200px;
+    max-width: 1200px;
     margin: 20px auto;
     display: flex;
     flex-wrap: wrap;
@@ -15,7 +15,7 @@
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 8px;
-    width: full-width;
+    width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .project-item h2 {
@@ -76,3 +76,19 @@
     cursor: pointer;
     margin: 0 10px;
 }
+.dropdown-content {
+    
+    overflow: auto;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    padding: 10px;
+}
+
+.dropdown-wrapper:hover .dropdown-content {
+    display: block;
+}
+
+

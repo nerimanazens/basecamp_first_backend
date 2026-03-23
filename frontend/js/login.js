@@ -17,7 +17,10 @@ loginButton.addEventListener("click", async (e) => {
         const data = await response.json();
         if (response.ok) {
             alert("Login successful!");
-            window.location.href = "../pages/project.html";
+            if (data.is_admin) {
+                window.location.href = "../pages/admin.html";
+            }
+            else window.location.href = "../pages/project.html";
         }
         
         else if (data.message == 'Invalid password!') {

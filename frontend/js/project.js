@@ -44,13 +44,14 @@ async function loadProjects() {
                         <button class="cancel-btn">Cancel</button>
                     </div>
                     </div>`;
-
             });
         }
     } catch (error) {
         console.error("Error during project loading:", error);
     }
 }
+
+loadUserInfo();
 
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', async () => {
@@ -133,3 +134,20 @@ project_list.addEventListener('click', async (e) => {
     }
 });
 
+const user_info_menu = document.getElementById("dropdown-content");
+
+async function loadUserInfo() {
+    try {
+        const response = await fetch('http://localhost:3000/user-info', {
+            credentials: 'include'
+        });
+        const { user } = await response.json();
+        user_info_menu.innerHTML = `
+            <p><strong>Name:</strong> ${user.username}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Admin:</strong> ${user.is_admin ? 'Yes' : 'No'}</p>
+        `;
+    } catch (error) {
+        console.error("Error during user info loading:", error);
+    }
+}
