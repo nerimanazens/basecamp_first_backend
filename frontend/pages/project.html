@@ -10,31 +10,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body style="display: none;">
-    <nav class="flex justify-between items-center px-4 bg-gray-800 text-white w-[1200px] mx-auto rounded my-1">
-        <h1 class="text-[20px] font-bold">MyBaseCamp</h1>
-        <div class="flex items-center gap-4">
+<body style="display: none; justify-content: center;">
+    <div>
+        <nav class="flex justify-between items-center px-4 bg-gray-800 text-white w-[1200px] mx-auto rounded my-1">
+            <h1 class="text-[20px] font-bold">MyBaseCamp</h1>
+            <div class="flex items-center gap-4">
 
-            <div class="relative dropdown-wrapper p-4">
-                <i class="fas fa-user cursor-pointer" id="user-icon"></i>
-                <div class="dropdown-content absolute w-48 bg-white rounded shadow-lg text-gray-800" id="dropdown-content">
+                <div class="relative dropdown-wrapper p-4">
+                    <i class="fas fa-user cursor-pointer" id="user-icon"></i>
+                    <div class="dropdown-content absolute w-48 bg-white rounded shadow-lg text-gray-800"
+                        id="dropdown-content">
+                    </div>
                 </div>
+
+                <button id="logout" class="bg-red-500 text-white px-4 py-2 rounded">LogOut</button>
             </div>
+        </nav>
+        <form class="w-[1200px] mx-auto p-4 my-8 bg-white rounded shadow-lg">
+            <label for="project-name" class="font-bold text-[26px]">Create Project</label>
+            <input type="text" class="border p-2 rounded w-full my-2" placeholder="Project Name" id="project-name">
+            <textarea name="description" id="project-description" class="border p-2 rounded w-full my-2"
+                placeholder="Project Description"></textarea>
+            <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" id="create-button">Create</button>
+        </form>
 
-            <button id="logout" class="bg-red-500 text-white px-4 py-2 rounded">LogOut</button>
-        </div>
-    </nav>
-    <form class="w-[1200px] mx-auto p-4 my-8 bg-white rounded shadow-lg">
-        <label for="project-name" class="font-bold text-[26px]">Create Project</label>
-        <input type="text" class="border p-2 rounded w-full my-2" placeholder="Project Name" id="project-name">
-        <textarea name="description" id="project-description" class="border p-2 rounded w-full my-2"
-            placeholder="Project Description"></textarea>
-        <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" id="create-button">Create</button>
-    </form>
-
-    <div class="project-list">
-
+        <div class="project-list"></div>    
     </div>
+
+    <div id="users-data" class="px-4">
+        <h1 class="text-[24px] font-bold text-gray-500 mb-8">Users</h1>
+    </div>
+
 
 
 

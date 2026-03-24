@@ -6,9 +6,20 @@ async function checkAuth() {
         });
         if (!response.ok) {
             window.location.href = '../pages/login.html';
-        } else {
-            document.body.style.display = 'block';
-            loadProjects();
+        } 
+        else {
+            if(response.is_admin){
+                document.body.style.display = 'flex';
+                loadProjects();
+                loadUserInfo();
+                loadUsers();
+            }
+            else{
+                document.body.style.display = 'flex';
+                loadProjects();
+                loadUserInfo();
+                loadUsers();
+            } 
         }
     } catch (error) {
         window.location.href = '../pages/login.html';
@@ -50,8 +61,6 @@ async function loadProjects() {
         console.error("Error during project loading:", error);
     }
 }
-
-loadUserInfo();
 
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', async () => {
@@ -117,8 +126,6 @@ project_list.addEventListener('click', async (e) => {
         const newDescription = projectItem.querySelector('.edit-desc').value;
         const id = e.target.dataset.id;
 
-        
-
         await fetch(`http://localhost:3000/update-project/${id}`, {
             method: 'PUT',
             headers: {
@@ -149,5 +156,36 @@ async function loadUserInfo() {
         `;
     } catch (error) {
         console.error("Error during user info loading:", error);
+    }
+}
+
+const users_data_div = document.getElementById('users-data');
+
+const loadUsers = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/all-users', {
+            credentials: 'include'
+        });
+        if (response.ok) {
+            const data = await response.json();
+
+            data.users.forEach(user => {
+                users_data_div.innerHTML += `
+                    <div class="user-item">
+                        <p><strong>Name:</strong> ${user.username}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Admin:</strong> ${user.is_admin ? 'Yes' : 'No'}</p>
+                        <div class="line"></div>
+                        <div class="set-admin-delete">
+                            <button class="set-admin-btn" data-id="${user.id}">Set User</button>
+                            <button class="delete-admin-btn" data-id="${user.id}">Delete User</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+        }
+    } catch (error) {
+        console.error("Error during users loading:", error);
     }
 }

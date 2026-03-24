@@ -53,7 +53,11 @@ router.get('/user-info', isLoggedIn, (req, res) => {
 });
 
 router.get('/check-session', isLoggedIn, (req, res) => {
-    res.json({ message: 'ok' });
+
+    if (isAdmin(req)) {
+        return res.json({ is_admin: true });
+    }
+    res.json({ message: 'ok', is_admin: false });
 });
 
 
