@@ -39,7 +39,7 @@ router.post('/logout', (req, res) => {
     res.json({ message: 'Logout successful!' });
 });
 
-router.get('/all-users', isAdmin, (req, res) => {
+router.get('/all-users',isLoggedIn,isAdmin, (req, res) => {
     const users = db.prepare('SELECT id, username, email, is_admin FROM users').all();
     res.json({ users });
 });
@@ -53,11 +53,23 @@ router.get('/user-info', isLoggedIn, (req, res) => {
 });
 
 router.get('/check-session', isLoggedIn, (req, res) => {
-
-    if (isAdmin(req)) {
+    const is_admin = db.prepare('SELECT is_admin FROM users WHERE id = ?').get(req.session.user_id).is_admin;
+    if (is_admin) {
         return res.json({ is_admin: true });
     }
     res.json({ message: 'ok', is_admin: false });
+});
+
+router.post('/set-admin/:userId', isLoggedIn, isAdmin, (req, res) => {
+    const { userId } = req.params;
+    db.prepare('UPDATE users SET is_admin = 1 WHERE id = ?').run(userId);
+    res.json({ message: 'User set as admin successfully!' });
+});
+
+router.post('/remove-admin/:userId', isLoggedIn, isAdmin, (req, res) => {
+    const { userId } = req.params;
+    db.prepare('UPDATE users SET is_admin = 0 WHERE id = ?').run(userId);
+    res.json({ message: 'Admin rights removed successfully!' });
 });
 
 

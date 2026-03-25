@@ -4,21 +4,21 @@ async function checkAuth() {
         const response = await fetch('http://localhost:3000/check-session', {
             credentials: 'include'
         });
+        const data = await response.json();
         if (!response.ok) {
             window.location.href = '../pages/login.html';
         } 
         else {
-            if(response.is_admin){
+            if(data.is_admin){
                 document.body.style.display = 'flex';
                 loadProjects();
                 loadUserInfo();
                 loadUsers();
             }
             else{
-                document.body.style.display = 'flex';
+                document.body.style.display = 'block';
                 loadProjects();
                 loadUserInfo();
-                loadUsers();
             } 
         }
     } catch (error) {
@@ -153,11 +153,28 @@ async function loadUserInfo() {
             <p><strong>Name:</strong> ${user.username}</p>
             <p><strong>Email:</strong> ${user.email}</p>
             <p><strong>Admin:</strong> ${user.is_admin ? 'Yes' : 'No'}</p>
+            <button id="delete-account">Delete Account</button>
         `;
     } catch (error) {
         console.error("Error during user info loading:", error);
     }
 }
+
+delete_account_button = document.getElementById('delete-account');
+delete_account_button.addEventListener('click', async () => {
+    try {
+        const response = await fetch('http://localhost:3000/delete-account', {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        if (response.ok) {
+            window.location.href = '../pages/login.html';
+        }
+    } catch (error) {
+        console.error("Error during account deletion:", error);
+    }
+});
+
 
 const users_data_div = document.getElementById('users-data');
 
@@ -177,8 +194,8 @@ const loadUsers = async () => {
                         <p><strong>Admin:</strong> ${user.is_admin ? 'Yes' : 'No'}</p>
                         <div class="line"></div>
                         <div class="set-admin-delete">
-                            <button class="set-admin-btn" data-id="${user.id}">Set User</button>
-                            <button class="delete-admin-btn" data-id="${user.id}">Delete User</button>
+                            <button class="set-admin-btn" data-id="${user.id}">Set Admin</button>
+                            <button class="delete-admin-btn" data-id="${user.id}">Remove Admin</button>
                         </div>
                     </div>
                 `;
@@ -189,3 +206,31 @@ const loadUsers = async () => {
         console.error("Error during users loading:", error);
     }
 }
+
+const users_data = document.getElementById('users-data');
+users_data.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('set-admin-btn')) {
+        const userId = e.target.dataset.id;
+        await fetch(`http://localhost:3000/set-admin/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+        });
+        users_data.innerHTML = '';
+        await loadUsers();
+    }
+    else if (e.target.classList.contains('delete-admin-btn')) {
+        const userId = e.target.dataset.id;
+        await fetch(`http://localhost:3000/remove-admin/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+        });
+        users_data.innerHTML = '';
+        await loadUsers();
+    }
+}); 
