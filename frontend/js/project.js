@@ -153,30 +153,30 @@ async function loadUserInfo() {
             <p><strong>Name:</strong> ${user.username}</p>
             <p><strong>Email:</strong> ${user.email}</p>
             <p><strong>Admin:</strong> ${user.is_admin ? 'Yes' : 'No'}</p>
-            <button id="delete-account">Delete Account</button>
+            <button id="delete-account" class="bg-red-500 text-white px-2  rounded">Delete Account</button>
         `;
     } catch (error) {
         console.error("Error during user info loading:", error);
     }
 }
 
-delete_account_button = document.getElementById('delete-account');
-delete_account_button.addEventListener('click', async () => {
-    try {
-        const response = await fetch('http://localhost:3000/delete-account', {
-            method: 'DELETE',
-            credentials: 'include'
-        });
-        if (response.ok) {
-            window.location.href = '../pages/login.html';
+document.addEventListener('click', async (e) => {
+    if (e.target.id === 'delete-account') {
+        try {
+            const response = await fetch('http://localhost:3000/delete-account', {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            if (response.ok) {
+                window.location.href = '../pages/login.html';
+            }
+        } catch (error) {
+            console.error("Error during account deletion:", error);
         }
-    } catch (error) {
-        console.error("Error during account deletion:", error);
     }
 });
-
-
-const users_data_div = document.getElementById('users-data');
+ 
+const users_data_div = document.getElementById('user-container');
 
 const loadUsers = async () => {
     try {
@@ -207,7 +207,7 @@ const loadUsers = async () => {
     }
 }
 
-const users_data = document.getElementById('users-data');
+const users_data = document.getElementById('user-container');
 users_data.addEventListener('click', async (e) => {
     if (e.target.classList.contains('set-admin-btn')) {
         const userId = e.target.dataset.id;

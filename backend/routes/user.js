@@ -25,10 +25,12 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Invalid password!' });
     }
     req.session.user_id = user.id;
-    res.json({ is_admin: user.is_admin, message: 'Login successful!'});
+    res.json({ is_admin: user.is_admin, message: 'Login successful!' });
 });
 
 router.delete('/delete-account', isLoggedIn, (req, res) => {
+    db.prepare('DELETE FROM projects WHERE user_id = ?').run(req.session.user_id);
+    db.prepare('DELETE FROM users WHERE id = ?').run(req.session.user_id);
     db.prepare('DELETE FROM users WHERE id = ?').run(req.session.user_id);
     req.session.destroy();
     res.json({ message: 'Account deleted successfully!' });
@@ -39,7 +41,7 @@ router.post('/logout', (req, res) => {
     res.json({ message: 'Logout successful!' });
 });
 
-router.get('/all-users',isLoggedIn,isAdmin, (req, res) => {
+router.get('/all-users', isLoggedIn, isAdmin, (req, res) => {
     const users = db.prepare('SELECT id, username, email, is_admin FROM users').all();
     res.json({ users });
 });
@@ -48,7 +50,7 @@ router.get('/user-info', isLoggedIn, (req, res) => {
     const user = db.prepare('SELECT id, username, email, is_admin FROM users WHERE id = ?').get(req.session.user_id);
     if (!user) {
         return res.status(404).json({ message: 'User not found!' });
-    }   
+    }
     res.json({ user });
 });
 
